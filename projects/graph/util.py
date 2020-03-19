@@ -1,5 +1,6 @@
 
 # Note: This Queue class is sub-optimal. Why?
+# popping from queue is O(n)
 class Queue():
     def __init__(self):
         self.queue = []
