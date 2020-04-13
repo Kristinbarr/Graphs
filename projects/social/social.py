@@ -1,3 +1,6 @@
+import random
+from util import Queue
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -28,43 +31,83 @@ class SocialGraph:
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
 
+
     def populate_graph(self, num_users, avg_friendships):
         """
         Takes a number of users and an average number of friendships
         as arguments
-
         Creates that number of users and a randomly distributed friendships
         between those users.
-
         The number of users must be greater than the average number of friendships.
         """
         # Reset graph
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
-        # Add users
+        
+        # Add users - loop and call create user the right amount of times
+        for i in range(num_users):
+            self.add_user(f"User {i+1}")
 
         # Create friendships
+        # to create N random friendships,
+        # create a list with all possible friendship combinations
+        # shuffle the list, then grab the first N elements from the list
+        possible_friendships = []
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id +1):
+                possible_friendships.append((user_id, friend_id))
+        random.shuffle(possible_friendships)
+
+        # create n friendships where n = avg_friendships * num_users // 2
+        # avg_friendships = total_friendships / num_users
+        # total_friendships = avg_friendships * num_users
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
 
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
-
         Returns a dictionary containing every user in that user's
         extended network with the shortest friendship path between them.
-
         The key is the friend's ID and the value is the path.
         """
+        # create a queue
+        q = Queue()
+        # enqueue a path to the starting user_id
+        q.enqueue([user_id])
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # while the queue is not empty
+        while q.size() > 0:
+            # dequeue the first path (take off front of queue ... [1,3,2,6,4] )
+            path = q.dequeue()
+            print('path:', path)
+            # grab the last id from that path ... cur_id: 4
+            current_id = path[-1] 
+            # check if it's been visited
+            # if not,
+            print('visited:', visited)
+            if current_id not in visited:
+                # add it to visited, { 1:[1], 3:[1,3], 2:[1,3,2], 10:[1,3,10], 9:[1,3,9], 5:[1,3,2,5], 6:[1,3,2,6], 7:[1,3,2,7], 4:[1,3,2,6,4] }
+                visited[current_id] = path
+                # enqueue the path to each friend to the queue
+                # this gets the friends for the cur_id { 4: {6} }
+                for friend_id in self.friendships[current_id]:
+                    # copy the current path ... [1,3,2,6,4]
+                    path_copy = path.copy()
+                    # append each friend ... [1,3,2,6,4,6]
+                    path_copy.append(friend_id)
+                    # add new path to back of queue 
+                    q.enqueue(path_copy)
         return visited
 
+<-
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.friendships)
+    print('friendships:\n',sg.friendships)
     connections = sg.get_all_social_paths(1)
-    print(connections)
+    print('connections:\n',connections)
