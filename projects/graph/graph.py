@@ -7,19 +7,32 @@ class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
-        self.vertices = {}
-
+        self.vertices = {} # This is our adjacency list
+        # example:
+        # {
+        #     "A": {"B": 1},
+        #     "B": {"C": 3, "D": 2},
+        #     "C": {},
+        #     "D": {},
+        #     "E": {"D": 1}
+        # }
     def add_vertex(self, vertex_id):
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
+        self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
-        Add a directed edge to the graph.
+        Add a directed edge to the graph from v1 to v2
         """
-        pass  # TODO
+        # check if v1 and v2 are valid/exist
+        if v1 in self.vertices and v2 in self.vertices:
+            # Add the edge
+            self.vertices[v1].add(v2)
+        # else print error
+        else:
+            print('ERROR ADDING EDGE: vertex not found')
 
     def get_neighbors(self, vertex_id):
         """
