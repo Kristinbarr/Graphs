@@ -110,6 +110,7 @@ class Graph:
         # Initial case
         if visited is None:
             visited = set()
+        
         # basecase: when we have no more neighbors
 
         # track visited nodes
@@ -119,8 +120,7 @@ class Graph:
         # call the function recursively - on neighbors not visited
         for neighbor in self.vertices[starting_vertex]:
             if neighbor not in visited:
-                self.dfs_recursive(neighbor, visited)
-
+                self.dft_recursive(neighbor, visited)
 
 
         # # create a stack and add starting vertex
@@ -146,7 +146,6 @@ class Graph:
 
         # # once finshed, print path
         # print(path)
-
 
 
 
@@ -212,7 +211,7 @@ class Graph:
                     new_path.append(next_vert)
                     s.push(new_path)
 
-    def dfs_recursive(self, starting_vertex):
+    def dfs_recursive(self, starting_vertex, dest_vert, visited=None, path=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -220,7 +219,32 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        # Initial cases
+        if visited is None:
+            visited = set()
+        
+        if path is None:
+            path = []
+        # basecase: when we have no more neighbors
+
+        # track visited nodes
+        visited.add(starting_vertex)
+        # using '+' python makes a copy, append will use reference
+        new_path = path + [starting_vertex]
+
+        # DO THE THING
+        if starting_vertex == dest_vert:
+            return new_path
+
+        # call the function recursively - on neighbors not visited
+        for neighbor in self.vertices[starting_vertex]:
+            if neighbor not in visited:
+                neighbor_path = self.dfs_recursive(neighbor, dest_vert, visited, new_path)
+                if neighbor_path:
+                    return neighbor_path
+                # if a node has no unvisited neighbors, do nothing
+                # essentially a base case
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
