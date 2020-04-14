@@ -162,9 +162,6 @@ class Graph:
 
         # create a set of traversed vertices
         visited = set()
-        
-        # create output list
-        paths = []
 
         # while queue is not empty
         while q.size() > 0:
@@ -174,7 +171,7 @@ class Graph:
             if path[-1] not in visited:
                 # DO THE THING
                 if path[-1] == destination_vertex:
-                    paths.append(path)
+                    return path
                 # add it to visited
                 visited.add(path[-1])
                 # enqueue all neighbors
