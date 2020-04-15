@@ -48,24 +48,32 @@ class Graph:
 
 
     def bft(self, starting_vertex):
-        """
-        Print each vertex in breadth-first order
-        beginning from starting_vertex.
-        """
         # create a queue and enqueue starting vertex
         q = Queue()
         q.enqueue([starting_vertex])
 
         # create a set of traversed vertices
         visited = set()
+        ancestor_path = [starting_vertex]
         
         # while queue is not empty
         while q.size() > 0:
             # dequeue/pop the first vertex
             path = q.dequeue()
+            node = path[-1]
             # if not visited,
-            if path[-1] not in visited:
-                print(path[-1])
+            if node not in visited:
+                # **********DO THE THING**********
+                # if cur path len is greater than ancestor_path
+                if len(path) > len(ancestor_path):
+                    # set ancestor_path as cur path
+                    ancestor_path = path
+                # if len are the same, 
+                if len(path) == len(ancestor_path):
+                    # whichever last is smaller, 
+                    if path[-1] < ancestor_path[-1]:
+                        # set that as ancestor path
+                        ancestor_path = path
                 # add it to visited
                 visited.add(path[-1])
                 # enqueue all neighbors
@@ -75,13 +83,11 @@ class Graph:
                     # add next_vert to new path and enqueue the new path
                     new_path.append(next_vert)
                     q.enqueue(new_path)
-
+                    # paths.append(new_path)
+        return ancestor_path
 
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
+
         # create a stack and add starting vertex
         s = Stack()
         s.push([starting_vertex])

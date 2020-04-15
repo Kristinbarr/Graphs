@@ -1,4 +1,3 @@
-from util import Stack
 from graph import Graph
 
 def earliest_ancestor(ancestors, starting_node):
@@ -10,34 +9,37 @@ def earliest_ancestor(ancestors, starting_node):
 
     # create a graph
     tree = Graph()
-    visited = []
 
-    # iterate through the ancestors
+    # add ancestors to graph by iterating through ancestors
     for pair in ancestors:
-        # if the person has not been visited,
-        if pair[0] not in visited:
+        parent = pair[0]
+        child = pair[1]
+        # if the parent or child has not been visited,
+        if parent not in tree.vertices:
             # add starting vertex and add to visited
-            tree.add_vertex(pair[0])
-            visited.append(pair[0]) 
-    
-        print(tree.vertices)
-        # add the relationships
-        tree.add_edge(pair[0], pair[1])
+            tree.add_vertex(parent)
+        if child not in tree.vertices:
+            tree.add_vertex(child)
+        # add the relationships, parent and child need to be flipped
+        tree.add_edge(child, parent)
+    print(tree.vertices)
 
+    # generate paths with traversal
+    longest_path = tree.bft(starting_node)
+    oldest_ancestor = longest_path[-1]
+    # if path is only 1 person long, no ancestors, return -1
+    if longest_path[0] == oldest_ancestor:
+        return -1
+
+    return oldest_ancestor
+
+# { 1:{10},  3:{1,2},  2:set(),  6:{3,5},  5:{4}, 
+# 7:{5},  4:set(),  8:{11,4},  9:{8},  11:set(),  10:set() }
 
 test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
                   (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
 
 earliest_ancestor(test_ancestors, 1)  # 10)
-# earliest_ancestor(test_ancestors, 2) # -1)
-# earliest_ancestor(test_ancestors, 3) # 10)
-# earliest_ancestor(test_ancestors, 4) # -1)
-# earliest_ancestor(test_ancestors, 5) # 4)
-# earliest_ancestor(test_ancestors, 6) # 10)
-# earliest_ancestor(test_ancestors, 7) # 4)
-# earliest_ancestor(test_ancestors, 8) # 4)
-# earliest_ancestor(test_ancestors, 9) # 4)
-# earliest_ancestor(test_ancestors, 10) # -1)
-# earliest_ancestor(test_ancestors, 11) # -1)
+earliest_ancestor(test_ancestors, 2) # -1)
 
 print()
