@@ -222,9 +222,10 @@ class Graph:
         # Initial cases
         if visited is None:
             visited = set()
-        
+
         if path is None:
             path = []
+
         # basecase: when we have no more neighbors
 
         # track visited nodes
