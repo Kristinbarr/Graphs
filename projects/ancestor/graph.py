@@ -22,6 +22,7 @@ class Graph:
         """
         self.vertices[vertex_id] = set()
 
+
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph from v1 to v2
@@ -34,6 +35,7 @@ class Graph:
         else:
             print('ERROR ADDING EDGE: vertex not found')
 
+
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
@@ -44,25 +46,34 @@ class Graph:
             return None
             # TODO: maybe return an exception instead
 
+
     def bft(self, starting_vertex):
-        """
-        Print each vertex in breadth-first order
-        beginning from starting_vertex.
-        """
         # create a queue and enqueue starting vertex
         q = Queue()
         q.enqueue([starting_vertex])
 
         # create a set of traversed vertices
         visited = set()
+        ancestor_path = [starting_vertex]
         
         # while queue is not empty
         while q.size() > 0:
             # dequeue/pop the first vertex
             path = q.dequeue()
+            node = path[-1]
             # if not visited,
-            if path[-1] not in visited:
-                print(path[-1])
+            if node not in visited:
+                # **********DO THE THING**********
+                # if cur path len is greater than ancestor_path
+                if len(path) > len(ancestor_path):
+                    # set ancestor_path as cur path
+                    ancestor_path = path
+                # if len are the same, 
+                if len(path) == len(ancestor_path):
+                    # whichever last is smaller, 
+                    if path[-1] < ancestor_path[-1]:
+                        # set that as ancestor path
+                        ancestor_path = path
                 # add it to visited
                 visited.add(path[-1])
                 # enqueue all neighbors
@@ -72,12 +83,11 @@ class Graph:
                     # add next_vert to new path and enqueue the new path
                     new_path.append(next_vert)
                     q.enqueue(new_path)
+                    # paths.append(new_path)
+        return ancestor_path
 
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
+
         # create a stack and add starting vertex
         s = Stack()
         s.push([starting_vertex])
@@ -100,6 +110,7 @@ class Graph:
                     # add next_vert to new path and enqueue the new path
                     new_path.append(next_vert)
                     s.push(new_path)
+
 
     def dft_recursive(self, starting_vertex, visited=None):
         """
@@ -148,7 +159,6 @@ class Graph:
         # print(path)
 
 
-
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
@@ -181,6 +191,7 @@ class Graph:
                     new_path.append(next_vert)
                     q.enqueue(new_path)
 
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -210,6 +221,7 @@ class Graph:
                     # add next_vert to new path and enqueue the new path
                     new_path.append(next_vert)
                     s.push(new_path)
+
 
     def dfs_recursive(self, starting_vertex, dest_vert, visited=None, path=None):
         """

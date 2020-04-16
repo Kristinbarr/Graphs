@@ -42,11 +42,31 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
         # Add users
+        # use add_user num_users times
 
         # Create friendships
+        for i in range(0, num_users):
+            self.add_user(f"User {i+1}")
+
+        # Generate all friendship combinations
+        # create a list with all random possible friendship combinations
+        possible_friendships = [] 
+
+        # Avoid making dups by sure first num is smaller than second
+        for user_id in self.users:
+            for friend_id in range(user_id+1, self.last_id+1):
+                possible_friendships.append((user_id, friend_id))
+
+        # shuffle all possible friendships
+        random.shuffle(possible_friendships)
+
+        # create for firs X pairs x is total // 2
+        for i in range()
+
+        # can avoid
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -66,5 +86,5 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
     print(sg.friendships)
-    connections = sg.get_all_social_paths(1)
-    print(connections)
+    # connections = sg.get_all_social_paths(1)
+    # print(connections)
